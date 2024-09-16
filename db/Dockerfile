@@ -1,0 +1,4 @@
+FROM postgres:alpine
+ENV POSTGRES_USER mirror
+ENV POSTGRES_PASSWORD mirror
+ENV POSTGRES_DB mirror_dev

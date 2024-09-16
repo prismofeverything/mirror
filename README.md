@@ -35,3 +35,19 @@ Note that this alias runs nREPL during development. To run nREPL in production (
 Run `clj -M:dev:nrepl` or `make repl`.
 
 Note that, just like with [CIDER](#cider), this alias runs nREPL during development. To run nREPL in production (typically when the system starts), use the kit-nrepl library through the +nrepl profile as described in [the documentation](https://kit-clj.github.io/docs/profiles.html#profiles).
+
+### Environment setup
+
+This app requires a local Postgres DB, and comes with a Dockerfile for setting a dev instance up (batteries included) in a container.  
+
+To run the dev DB container, first build the a Docker image for it:
+
+```
+docker build db/ -t mirror/mirror
+```
+
+Now, run a container using the image:
+
+```
+docker run -d -p 5432:5432 mirror/mirror
+```
