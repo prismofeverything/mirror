@@ -12,7 +12,7 @@
 
 (defmethod on-message :default
   [{:keys [id client-id ?data] :as message}]
-  (println "on-message: id: " id "  cilient-id: " client-id " ?data: " ?data))
+  (println "on-message: id: " id "  client-id: " client-id " ?data: " ?data))
 
 (defmethod on-message :guestbook/echo
   [{:keys [id client-id ?data send-fn] :as message}]
@@ -24,6 +24,35 @@
   (let [response (str "Hello to everyone from the client " client-id)]
    (doseq [uid (:any @connected-uids)]
      (send-fn uid [id response]))))
+
+(defonce worlds
+  (atom {:worlds {}}))
+
+(def create-world
+  [world-data])
+
+(defmethod on-message :mirror/create
+  [{:keys [id client-id ?data send-fn connected-uids] :as message}]
+  (let [world-data (:create-world data) ;; we'll have dimensions/rules/states/etc....
+        world (create-world world-data)]
+    (swap! worlds assoc (:id world) world)
+    (doseq [uid (:any @connected-uids)]
+     (send-fn uid [id {:message :create-world :world-id (:id world)}]))))
+
+(defmethod on-message :mirror/enter
+  [{:keys [id client-id ?data send-fn connected-uids] :as message}]
+  (let [world-id (:world-id data)
+        world (get @worlds world-id)]
+    (send-fn client-id [id world])))
+
+(defmethod on-message :mirror/flip
+  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
+
+(defmethod on-message :mirror/start
+  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
+
+(defmethod on-message :mirror/stop
+  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
 
 (defmethod ig/init-key :sente/connection
   [_ opts]
