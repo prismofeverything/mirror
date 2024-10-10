@@ -1,5 +1,14 @@
 # mirror
 
+## install
+
+* first, install the `clj` command line program
+* Then, install npm and start shadow-clj:
+> npm install
+> npx shadow-cljs watch app
+
+## start
+
 Start a [REPL](#repls) in your editor or terminal of choice.
 
 Start the server with:

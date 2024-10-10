@@ -28,31 +28,31 @@
 (defonce worlds
   (atom {:worlds {}}))
 
-(def create-world
+(defn create-world
   [world-data])
 
-(defmethod on-message :mirror/create
-  [{:keys [id client-id ?data send-fn connected-uids] :as message}]
-  (let [world-data (:create-world data) ;; we'll have dimensions/rules/states/etc....
-        world (create-world world-data)]
-    (swap! worlds assoc (:id world) world)
-    (doseq [uid (:any @connected-uids)]
-     (send-fn uid [id {:message :create-world :world-id (:id world)}]))))
+;; (defmethod on-message :mirror/create
+;;   [{:keys [id client-id ?data send-fn connected-uids] :as message}]
+;;   (let [world-data (:create-world data) ;; we'll have dimensions/rules/states/etc....
+;;         world (create-world world-data)]
+;;     (swap! worlds assoc (:id world) world)
+;;     (doseq [uid (:any @connected-uids)]
+;;      (send-fn uid [id {:message :create-world :world-id (:id world)}]))))
 
-(defmethod on-message :mirror/enter
-  [{:keys [id client-id ?data send-fn connected-uids] :as message}]
-  (let [world-id (:world-id data)
-        world (get @worlds world-id)]
-    (send-fn client-id [id world])))
+;; (defmethod on-message :mirror/enter
+;;   [{:keys [id client-id ?data send-fn connected-uids] :as message}]
+;;   (let [world-id (:world-id data)
+;;         world (get @worlds world-id)]
+;;     (send-fn client-id [id world])))
 
-(defmethod on-message :mirror/flip
-  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
+;; (defmethod on-message :mirror/flip
+;;   [{:keys [id client-id ?data send-fn connected-uids] :as message}])
 
-(defmethod on-message :mirror/start
-  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
+;; (defmethod on-message :mirror/start
+;;   [{:keys [id client-id ?data send-fn connected-uids] :as message}])
 
-(defmethod on-message :mirror/stop
-  [{:keys [id client-id ?data send-fn connected-uids] :as message}])
+;; (defmethod on-message :mirror/stop
+;;   [{:keys [id client-id ?data send-fn connected-uids] :as message}])
 
 (defmethod ig/init-key :sente/connection
   [_ opts]
